@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource dbdev {
+  provider = "postgresql"
+  url      = env("../.env/DATABASE_URL")
+}
+
+model User {
+  id        Int    @id @default(autoincrement())
+  email     String @unique
+  firstName String
+  lastName  String
+  password  String
+  role      Role   @default(USER)
+}
+
+model ProcessingDate {
+  id    Int @id @default(autoincrement())
+  year  Int
+  month Int
+  day   Int
+}
+
+model Salary {
+  id            Int           @id @default(autoincrement())
+  name          String
+  amount        Int
+  currency      Currency      @default(HUF)
+  timeFrequency TimeFrequency @default(ONETIME)
+  paymentType   PaymentType   @default(CASH)
+}
+
+model Expense {
+  id            Int           @id @default(autoincrement())
+  name          String
+  amount        Int
+  currency      Currency      @default(HUF)
+  timeFrequency TimeFrequency @default(ONETIME)
+  paymentType   PaymentType   @default(CASH)
+}
+
+model ExpenseToPay {
+  id           Int     @id @default(autoincrement())
+  numOfPayment Int
+  payed        Boolean @default(false)
+}
+
+enum Currency {
+  HUF
+  EUR
+  USD
+}
+
+enum PaymentType {
+  CASH
+  CREDIT_CARD
+  CREDIT_CARD_AUTO
+  BANK_TRANSFER
+}
+
+enum TimeFrequency {
+  ONETIME
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+enum Role {
+  USER
+  ADMIN
+}
